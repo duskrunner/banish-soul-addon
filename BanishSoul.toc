@@ -1,0 +1,11 @@
+## Interface: 80205
+## Title: BanishSoul
+## Notes: Collect statistics of played arena matches for export to banishsoul.com.
+## Version: 1.0.0
+## Author: Duskrunner
+## SavedVariablesPerCharacter: BanishSoulDB
+## X-Website: https://banishsoul.com
+
+Embeds.xml
+Core.lua
+BanishSoul.xml
