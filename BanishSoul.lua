@@ -44,7 +44,7 @@ function BS:GetUTCTimestamp(timezone)
 end
 
 function BS:onPVPEnd()
-  if _G.IsArenaSkirmish() then
+  if _G.IsRatedArena() and not _G.IsArenaSkirmish() and not _G.IsRatedBattleground() then
     BS.MatchData = {}
 
     local StatsNum = _G.C_PvP.GetMatchPVPStatColumns()
@@ -58,16 +58,12 @@ function BS:onPVPEnd()
     BS.MatchData.duration = _G.C_PvP.GetActiveMatchDuration()
     BS.MatchData.time = BS:GetUTCTimestamp()
     BS.MatchData.isBrawl = _G.C_PvP.IsInBrawl()
+    BS.MatchData.isRated = true
 
     if BS.MapIDRemap[BS.MatchData.map] then
       BS.MatchData.map = BS.MapIDRemap[BS.MatchData.map]
     end
-
-    -- if IsRatedBattleground() or IsRatedArena() and not IsArenaSkirmish() then
-    if _G.IsArenaSkirmish() then    
-      BS.MatchData.isRated = true
-    end
-
+    
     BS.MatchData.players = {}
     for i=1, BS.MatchData.playersNum do
       local data = {_G.GetBattlefieldScore(i)}
@@ -93,19 +89,7 @@ function BS:onPVPEnd()
       end
     end
 
-    if not BS.MatchData.playerNum or BS.MatchData.map == 1170 or BS.matchData.Map == 2177 or (BS.MatchData.isArena and BS.MatchData.isRated and BS.MatchData.isBrawl) then
-      BS.MatchData.Hidden = true
-    else
-      BS.MatchData.Hidden = false
-    end
     table.insert(BS.Database, BS.MatchData)
-    if not BS.MatchData.Hidden then
-      if BS.MatchData.isArena then
-        BS:UpdateArenaData(false)
-      else
-        BS:UpdateBGData(false)
-      end
-    end
   end
 	_G.PVPMatchResults.buttonContainer.leaveButton:Enable()
 end
@@ -152,11 +136,12 @@ function BS:CreateExportString()
   str = str..']}'
   BS.ExportTextArea:AddLine(str)
   BS.ExportTextArea:Display()
+  _G.BanishSoulDB = {}
+  BS.Database = _G.BanishSoulDB
 end
 
 function BS:OnEvent(_, event, ...)
-  if event == "PVP_MATCH_COMPLETE" then -- and not BS.DataSaved then
-    -- BS.DataSaved = true
+  if event == "PVP_MATCH_COMPLETE" then
     _G.PVPMatchResults.buttonContainer.leaveButton:Disable()
     _G.C_Timer.After(1, BS.onPVPEnd)
   elseif event == "ADDON_LOADED" and ... == "BanishSoul" then
