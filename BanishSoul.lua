@@ -30,17 +30,20 @@ function BS:Round(num, idp)
 	return mfloor(num * mult + 0.5) / mult
 end
 
-function BS:GetUTCTimestamp(timezone)
+function BS:GetUTCTimestamp()
 	local d1 = date("*t")
 	local d2 = date("!*t")
 	d2.isdst = d1.isdst
 	local utc = time(d2)
-	if timezone then
-		local player = time(d1)
-		return utc, BS:Round((player - utc) / 3600, 0)
-	else
-		return utc
-	end
+	return utc
+end
+
+function BS:generateUuid()
+  local template ='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+  return string.gsub(template, '[x]', function (c)
+      local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
+      return string.format('%x', v)
+    end)
 end
 
 function BS:onPVPEnd()
@@ -59,6 +62,7 @@ function BS:onPVPEnd()
     BS.MatchData.time = BS:GetUTCTimestamp()
     BS.MatchData.isBrawl = _G.C_PvP.IsInBrawl()
     BS.MatchData.isRated = true
+    BS.MatchData.uuid = BS:generateUuid()
 
     if BS.MapIDRemap[BS.MatchData.map] then
       BS.MatchData.map = BS.MapIDRemap[BS.MatchData.map]
@@ -97,7 +101,7 @@ end
 function BS:CreateExportString()
   local str = ''
   BS.ExportTextArea:Clear()
-  str = str..'{ "data": ['
+  str = str..'{'..'"locale": '..'"'.._G.GetLocale()..'"'..', "data": ['
   for i=1, #BS.Database do
     str = str..'{'
     for k, v in pairs(BS.Database[i]) do  
