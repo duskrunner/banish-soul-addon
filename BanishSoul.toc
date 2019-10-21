@@ -7,5 +7,4 @@
 ## X-Website: https://banishsoul.com
 
 Embeds.xml
-Core.lua
 BanishSoul.xml
