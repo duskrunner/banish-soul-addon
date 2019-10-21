@@ -9,6 +9,6 @@ externals:
   Libs/LibTextDump-1.0: https://repos.wowace.com/wow/libtextdump-1-0
 
 ignore:
-  Core.lua
+  - Core.lua
 
 license-output: LICENSE.txt
