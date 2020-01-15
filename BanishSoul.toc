@@ -1,4 +1,4 @@
-## Interface: 80205
+## Interface: 80300
 ## Title: BanishSoul
 ## Notes: Collect statistics of played arena matches for export to banishsoul.com.
 ## Version: 1.0.0
