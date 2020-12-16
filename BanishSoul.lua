@@ -47,7 +47,7 @@ function BS:generateUuid()
 end
 
 function BS:onPVPEnd()
-  if _G.C_PvP.IsRatedArena() and not _G.C_PvP.IsArenaSkirmish() and not _G.C_PvP.IsRatedBattleground() then
+  if _G.C_PvP.IsRatedArena() and not _G.IsArenaSkirmish() and not _G.C_PvP.IsRatedBattleground() then
     BS.MatchData = {}
 
     local StatsNum = _G.C_PvP.GetMatchPVPStatColumns()
